@@ -8,6 +8,7 @@ import os
 import ls
 import rm
 import de_encryption
+import help
 import shutil
 from pathlib import Path
 
@@ -141,15 +142,7 @@ def command_operation(Sandbox, tokens, base_path):
                 print(f"Error: Permission denied to create directory '{tokens[1]}'.")
 
     elif tokens[0] == 'help':
-        print("Available commands:")
-        print("cd - Change the current directory.")
-        print("rm - Remove a file or directory.")
-        print("clear - Clear the terminal screen.")
-        print("ls - List files and directories in the current directory.")
-        print("exit - Exit the terminal.")
-        print("mkdir - Create a new directory.")
-        print("help - Show this help message.")
-        print("command --help - Show help for a specific command.")
+        help.help()
 
     elif tokens[0] == '': #empty command, do nothing
         pass
