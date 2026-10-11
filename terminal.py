@@ -27,9 +27,30 @@ def command_operation(Sandbox, tokens, base_path):
 
     current_path = os.getcwd()
 
-    
+    if tokens[0] == 'sudo':
+        if len(tokens) == 1:
+            print("Error: Please specify a command to run with sudo.")
+            return
+        print("Running command with simulated sudo; system privileges are unchanged.")
+        command_operation(Sandbox, tokens[1:], base_path)
 
-    if tokens[0] == 'create':
+    if tokens[0] == 'cat':
+        if len(tokens) < 2:
+            print("Error: Please specify a file to display.")
+        else:
+            file_to_display = ' '.join(tokens[1:])
+            try:
+                with open(file_to_display, 'r') as f:
+                    data = f.read()
+                    print(data)
+            except FileNotFoundError:
+                print(f"Error: File '{file_to_display}' not found.")
+            except PermissionError:
+                print(f"Error: Permission denied to access '{file_to_display}'.")
+            except IsADirectoryError:
+                print(f"Error: '{file_to_display}' is a directory, not a file.")
+
+    elif tokens[0] == 'create':
         try:
             createtxt.create_txt(tokens)
         except PermissionError:
@@ -41,7 +62,7 @@ def command_operation(Sandbox, tokens, base_path):
         except PermissionError:
             print(f"Error: Permission denied to write to file '{tokens[1]}'.")
 
-    elif tokens[0] == 'txtencrypt':
+    elif tokens[0] == 'encrypt':
             if len(tokens) < 2:
                 print("Error: Please specify a txt to encrypt.")
             else:
@@ -54,7 +75,7 @@ def command_operation(Sandbox, tokens, base_path):
                     except: 
                         print("Error")
 
-    elif tokens[0] == 'txtdecrypt':
+    elif tokens[0] == 'decrypt':
         if len(tokens) < 2:
             print("Error: Please specify a txt to decrypt.")
         else:
@@ -66,31 +87,6 @@ def command_operation(Sandbox, tokens, base_path):
                 try: os.path.isfile(tokens[1])
                 except: 
                     print("Error")
-
-    elif tokens[0] == 'encrypt':
-        if len(tokens) < 2:
-            print("Error: Please specify data to encrypt.")
-        else:
-            data_to_encrypt = ' '.join(tokens[1:])
-            encrypted_data = de_encryption.encrypt(data_to_encrypt)
-            print(f"Encrypted data: {encrypted_data}")
-            os.mkdir(encrypted_data)
-            try:
-                shutil.rmtree(tokens[1])
-            except: 
-                try: os.path.isfile(tokens[1])
-                except: 
-                    print("Error")
-
-    elif tokens[0] == 'decrypt':
-        if len(tokens) < 2:
-            print("Error: Please specify data to decrypt.")
-        else:
-            data_to_decrypt = ' '.join(tokens[1:])
-            decrypted_data = de_encryption.decrypt(data_to_decrypt)
-            print(f"Decrypted data: {decrypted_data}")
-            os.mkdir(decrypted_data)
-            shutil.rmtree(tokens[1])
 
     elif tokens[0] == 'cd':
         try:
